@@ -30,6 +30,10 @@ execFileSync("npx", [
 	`--alias:obsidian=${stub}`, `--outfile=${bundle}`,
 ], { stdio: "pipe" });
 
+// The plugin reads Node globals off `window`, which Obsidian provides and a
+// bare Node process does not
+globalThis.window = { process };
+
 const { unpack } = await import(bundle);
 
 const dest = mkdtempSync(join(tmpdir(), "otm-out-"));

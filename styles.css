@@ -103,7 +103,8 @@ body {
 /* A shell that exited keeps its output; the strike-through says
    the tab is a transcript, not a live session */
 .otm-tab.is-dead .otm-tab-title {
-  text-decoration: line-through;
+  /* Longhand: Obsidian's CSS lint flags the text-decoration shorthand */
+  text-decoration-line: line-through;
   color: var(--text-faint);
 }
 
@@ -612,30 +613,42 @@ body {
     overflow: hidden;
 }
 
-.xterm-dim {
+/* --- Local edits to the section above, kept together so an upgrade is easy ---
+   Two rules below differ from upstream xterm.css, in form only:
+
+   * `opacity: 1 !important` and `font-size: 11px !important` are written with
+     a `.xterm` ancestor instead. The extra specificity beats the generated
+     class the same way, without !important.
+   * The `text-decoration` shorthand is split into longhand. Obsidian's CSS
+     lint reports the shorthand as only partially supported; the longhand
+     properties are what the shorthand expands to, so rendering is unchanged.
+
+   Nothing else in this file is hand-edited. */
+
+.xterm .xterm-dim {
     /* Dim should not apply to background, so the opacity of the foreground color is applied
      * explicitly in the generated class and reset to 1 here */
-    opacity: 1 !important;
+    opacity: 1;
 }
 
-.xterm-underline-1 { text-decoration: underline; }
-.xterm-underline-2 { text-decoration: double underline; }
-.xterm-underline-3 { text-decoration: wavy underline; }
-.xterm-underline-4 { text-decoration: dotted underline; }
-.xterm-underline-5 { text-decoration: dashed underline; }
+.xterm-underline-1 { text-decoration-line: underline; }
+.xterm-underline-2 { text-decoration-line: underline; text-decoration-style: double; }
+.xterm-underline-3 { text-decoration-line: underline; text-decoration-style: wavy; }
+.xterm-underline-4 { text-decoration-line: underline; text-decoration-style: dotted; }
+.xterm-underline-5 { text-decoration-line: underline; text-decoration-style: dashed; }
 
 .xterm-overline {
-    text-decoration: overline;
+    text-decoration-line: overline;
 }
 
-.xterm-overline.xterm-underline-1 { text-decoration: overline underline; }
-.xterm-overline.xterm-underline-2 { text-decoration: overline double underline; }
-.xterm-overline.xterm-underline-3 { text-decoration: overline wavy underline; }
-.xterm-overline.xterm-underline-4 { text-decoration: overline dotted underline; }
-.xterm-overline.xterm-underline-5 { text-decoration: overline dashed underline; }
+.xterm-overline.xterm-underline-1 { text-decoration-line: overline underline; }
+.xterm-overline.xterm-underline-2 { text-decoration-line: overline underline; text-decoration-style: double; }
+.xterm-overline.xterm-underline-3 { text-decoration-line: overline underline; text-decoration-style: wavy; }
+.xterm-overline.xterm-underline-4 { text-decoration-line: overline underline; text-decoration-style: dotted; }
+.xterm-overline.xterm-underline-5 { text-decoration-line: overline underline; text-decoration-style: dashed; }
 
 .xterm-strikethrough {
-    text-decoration: line-through;
+    text-decoration-line: line-through;
 }
 
 .xterm-screen .xterm-decoration-container .xterm-decoration {
@@ -670,9 +683,9 @@ body {
 }
 
 /* Arrows */
-.xterm .xterm-scrollable-element > .scrollbar > .scra {
+.xterm .xterm-scrollable-element > .scrollbar > .scra.scra {
 	cursor: pointer;
-	font-size: 11px !important;
+	font-size: 11px;
 }
 
 .xterm .xterm-scrollable-element > .visible {
