@@ -1,0 +1,39 @@
+node_modules/
+main.js
+.DS_Store
+
+# Local-only vault settings; carries an absolute path to the author's vault.
+.obsidian/
+
+# Local development only; not part of the public repo.
+.open_bull/
+CLAUDE.md
+
+# Release staging: the node-pty archives are attached to a GitHub release,
+# never committed.
+dist/
+
+# In-app verification tools. They carry a hard-coded debug port and are written
+# against the author's own vault, so they are of no use to anyone cloning this.
+# cli/ itself stays tracked: install_obsidian_plugin.sh and pack_pty_runtime.sh
+# are how the plugin is installed and released.
+cli/obsidian/
+
+# --- Sensitive and local-only paths. ---
+# Runtime plugin settings, written by the app. Holds whatever the user typed in,
+# including a custom shell path and working directory.
+data.json
+
+# Credentials and key material. Never committed, in any form.
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.crt
+id_rsa*
+
+# Local AI-assistant instructions and internal task notes.
+.claude/
+TODO.md
+docs_ai/

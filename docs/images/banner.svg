@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Open Terminal — a real terminal panel inside Obsidian</title>
+  <desc id="desc">Dark terminal-themed banner with a three-line headline and cyan signal-stream waves.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#070d18"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#background)"/>
+
+  <!-- Product mark -->
+  <g fill="none" stroke="#22d3ee" stroke-width="2">
+    <rect x="72" y="58" width="32" height="24"/>
+    <path d="M79 66l5 4-5 4M89 74h8"/>
+  </g>
+  <text x="120" y="77" fill="#f5fbff" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="20" font-weight="700">Open Terminal</text>
+
+  <rect x="72" y="132" width="3" height="350" fill="#22d3ee" opacity=".55"/>
+
+  <!-- Message -->
+  <g font-family="'JetBrains Mono',ui-monospace,monospace" font-weight="700" letter-spacing="-1.5">
+    <text x="112" y="218" fill="#f5fbff" font-size="55">A real terminal.</text>
+    <text x="112" y="287" fill="#f5fbff" font-size="55">Below your editor.</text>
+    <text x="112" y="356" fill="#22d3ee" font-size="55">Where the notes are.</text>
+  </g>
+  <text x="115" y="398" fill="#94a3b8" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="14">Obsidian plugin · real TTY via node-pty · tabs · desktop only</text>
+
+  <!-- Feature labels -->
+  <g font-family="'JetBrains Mono',ui-monospace,monospace" font-size="14" font-weight="700">
+    <text x="115" y="440" fill="#fcd34d">Tabs</text>
+    <text x="177" y="440" fill="#5eead4">Real TTY</text>
+    <text x="276" y="440" fill="#c4b5fd">cd to note</text>
+    <text x="400" y="440" fill="#fda4af">Light &amp; Dark</text>
+  </g>
+
+  <!-- Low signal stream: intentionally fine enough to remain texture at small sizes. -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M0 622 C55 604 93 639 151 618 S250 600 315 621 S416 640 482 615 S585 600 651 623 S751 642 817 617 S916 598 982 621 S1085 642 1150 616 S1238 602 1280 618" stroke="#22d3ee" stroke-width="1.1" stroke-opacity=".50"/>
+    <path d="M0 612 C58 591 101 628 161 609 S264 590 326 611 S425 631 490 607 S590 589 655 613 S757 633 821 608 S920 588 986 612 S1088 632 1153 607 S1240 592 1280 608" stroke="#22d3ee" stroke-width="1.05" stroke-opacity=".45"/>
+    <path d="M0 602 C49 585 106 617 166 599 S267 578 330 601 S430 620 495 597 S595 580 661 602 S762 622 828 598 S926 577 991 601 S1091 622 1157 597 S1243 580 1280 597" stroke="#22d3ee" stroke-width="1" stroke-opacity=".41"/>
+    <path d="M0 592 C60 573 111 608 171 589 S272 570 337 591 S436 613 501 587 S600 569 667 592 S766 612 833 588 S932 569 997 591 S1097 612 1163 587 S1247 571 1280 588" stroke="#38bdf8" stroke-width=".95" stroke-opacity=".37"/>
+    <path d="M0 582 C52 566 116 596 177 579 S278 559 342 581 S442 602 507 577 S607 559 673 582 S773 603 840 578 S938 560 1003 581 S1103 604 1168 577 S1250 561 1280 578" stroke="#38bdf8" stroke-width=".9" stroke-opacity=".33"/>
+    <path d="M0 572 C60 553 121 587 183 570 S284 550 348 571 S448 593 513 568 S613 550 680 572 S780 594 846 569 S944 550 1009 572 S1110 595 1174 568 S1254 552 1280 568" stroke="#38bdf8" stroke-width=".9" stroke-opacity=".29"/>
+    <path d="M0 562 C55 545 126 577 189 560 S290 540 354 561 S454 582 520 558 S620 540 686 562 S787 584 852 559 S951 540 1015 561 S1116 584 1180 558 S1258 541 1280 559" stroke="#3b82f6" stroke-width=".85" stroke-opacity=".26"/>
+    <path d="M0 552 C65 534 132 569 195 550 S296 531 360 552 S460 574 526 549 S626 530 692 552 S793 575 858 550 S957 531 1021 552 S1122 575 1186 549 S1261 531 1280 550" stroke="#3b82f6" stroke-width=".8" stroke-opacity=".23"/>
+    <path d="M0 542 C57 527 138 557 201 541 S302 521 366 542 S466 563 532 539 S632 520 698 542 S799 565 864 540 S963 521 1027 542 S1128 565 1192 539 S1264 521 1280 541" stroke="#3b82f6" stroke-width=".8" stroke-opacity=".20"/>
+    <path d="M0 532 C67 514 144 548 208 531 S309 512 373 532 S473 554 539 529 S639 510 704 532 S805 555 870 530 S969 511 1033 532 S1134 555 1198 529 S1268 512 1280 531" stroke="#3b82f6" stroke-width=".75" stroke-opacity=".18"/>
+    <path d="M0 522 C61 507 150 536 214 521 S315 501 379 522 S479 543 545 519 S645 500 710 522 S811 545 876 520 S975 501 1039 522 S1140 545 1204 519 S1271 502 1280 521" stroke="#3b82f6" stroke-width=".75" stroke-opacity=".16"/>
+    <path d="M0 512 C70 495 156 527 220 511 S321 492 385 512 S485 533 551 509 S651 491 716 512 S817 535 882 510 S981 492 1045 512 S1146 535 1210 509 S1274 492 1280 511" stroke="#3b82f6" stroke-width=".7" stroke-opacity=".14"/>
+    <path d="M0 502 C64 488 162 517 226 501 S327 482 391 502 S491 523 557 499 S657 481 722 502 S823 525 888 500 S987 482 1051 502 S1152 525 1216 499 S1277 482 1280 501" stroke="#38bdf8" stroke-width=".7" stroke-opacity=".12"/>
+    <path d="M0 492 C73 476 168 508 232 491 S333 472 397 492 S497 514 563 489 S663 471 728 492 S829 515 894 490 S993 472 1057 492 S1158 516 1222 489 S1279 473 1280 491" stroke="#38bdf8" stroke-width=".65" stroke-opacity=".10"/>
+    <path d="M0 482 C68 469 174 498 238 481 S339 462 403 482 S503 504 569 479 S669 461 734 482 S835 505 900 480 S999 462 1063 482 S1164 506 1228 479 S1279 463 1280 481" stroke="#38bdf8" stroke-width=".65" stroke-opacity=".09"/>
+    <path d="M0 472 C76 457 180 489 244 471 S345 452 409 472 S509 494 575 469 S675 451 740 472 S841 495 906 470 S1005 452 1069 472 S1170 496 1234 469 S1279 453 1280 471" stroke="#22d3ee" stroke-width=".6" stroke-opacity=".08"/>
+    <path d="M0 462 C71 450 186 480 250 461 S351 442 415 462 S515 484 581 459 S681 441 746 462 S847 485 912 460 S1011 442 1075 462 S1176 486 1240 459 S1279 443 1280 461" stroke="#22d3ee" stroke-width=".6" stroke-opacity=".07"/>
+    <path d="M0 452 C79 438 192 470 256 451 S357 432 421 452 S521 474 587 449 S687 431 752 452 S853 475 918 450 S1017 432 1081 452 S1182 476 1246 449 S1279 433 1280 451" stroke="#22d3ee" stroke-width=".6" stroke-opacity=".06"/>
+  </g>
+
+  <g fill="#67e8f9">
+    <circle cx="49" cy="614" r="1.5" opacity=".68"/><circle cx="128" cy="599" r="1.1" opacity=".46"/><circle cx="204" cy="610" r="1.3" opacity=".59"/><circle cx="289" cy="581" r="1" opacity=".35"/><circle cx="361" cy="593" r="1.5" opacity=".62"/>
+    <circle cx="447" cy="604" r="1.1" opacity=".44"/><circle cx="529" cy="577" r="1.4" opacity=".65"/><circle cx="608" cy="570" r="1" opacity=".32"/><circle cx="687" cy="595" r="1.3" opacity=".56"/><circle cx="761" cy="580" r="1.5" opacity=".70"/>
+    <circle cx="839" cy="602" r="1.1" opacity=".41"/><circle cx="913" cy="559" r="1.4" opacity=".61"/><circle cx="986" cy="586" r="1" opacity=".37"/><circle cx="1064" cy="604" r="1.5" opacity=".67"/><circle cx="1140" cy="571" r="1.2" opacity=".49"/>
+    <circle cx="1214" cy="595" r="1.4" opacity=".64"/><circle cx="82" cy="530" r="1" opacity=".33"/><circle cx="382" cy="523" r="1.2" opacity=".45"/><circle cx="727" cy="512" r="1.1" opacity=".40"/><circle cx="1108" cy="524" r="1.3" opacity=".54"/>
+  </g>
+</svg>

@@ -1,0 +1,690 @@
+/* Open Terminal — a terminal panel below the editor */
+
+/* ============================================================
+   Spacing scale
+   Every gap, padding and margin below is one of these steps. A
+   literal value survives only where the number is not spacing —
+   room reserved for an icon, or a negative offset that pulls an
+   element over a border — and each of those says so on the spot.
+   ============================================================ */
+body {
+  --otm-sp-1: 2px;
+  --otm-sp-2: 4px;
+  --otm-sp-3: 6px;
+  --otm-sp-4: 8px;
+  --otm-sp-5: 12px;
+  --otm-sp-6: 16px;
+  --otm-sp-7: 24px;
+}
+
+/* ── Panel shell ────────────────────────────────────── */
+/* Obsidian draws a view header — back/forward arrows, the view title and the
+   tab actions — above every leaf. A terminal has its own header right below
+   it, so the two stack into a double title bar; this drops Obsidian's for
+   this view only. */
+.workspace-leaf-content[data-type="open-terminal-panel-view"] > .view-header {
+  display: none;
+}
+
+/* The view content box is padded by Obsidian; a terminal fills
+   its pane instead, so the padding is dropped here. */
+.otm-root {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.otm-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-4);
+  padding: var(--otm-sp-2) var(--otm-sp-4);
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+}
+
+/* ── Tab strip ──────────────────────────────────────── */
+.otm-tabs {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.otm-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.otm-tab {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-2);
+  max-width: 200px;
+  padding: var(--otm-sp-1) var(--otm-sp-2) var(--otm-sp-1) var(--otm-sp-4);
+  border-radius: var(--radius-s);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.otm-tab:hover {
+  background: var(--background-modifier-hover);
+}
+
+.otm-tab.is-active {
+  background: var(--background-primary);
+  color: var(--text-normal);
+  box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+}
+
+.otm-tab-index {
+  flex: none;
+  font-family: var(--font-monospace);
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.otm-tab-title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* A shell that exited keeps its output; the strike-through says
+   the tab is a transcript, not a live session */
+.otm-tab.is-dead .otm-tab-title {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+
+.otm-tab-close,
+.otm-tab-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.otm-tab-close:hover,
+.otm-tab-add:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.otm-tab-close svg,
+.otm-tab-add svg {
+  width: 12px;
+  height: 12px;
+}
+
+.otm-tab-add {
+  margin-left: var(--otm-sp-1);
+}
+
+/* ── Header actions ─────────────────────────────────── */
+.otm-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-1);
+}
+
+.otm-cwd {
+  max-width: 260px;
+  margin-right: var(--otm-sp-3);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.otm-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radius-s);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.otm-icon-btn:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.otm-icon-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ── Sessions ───────────────────────────────────────── */
+/* --otm-term-bg is set from the view when the palette changes; the terminal
+   deliberately keeps its own background rather than the Obsidian one */
+.otm-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: var(--otm-term-bg, #1e1e1e);
+}
+
+/* Every session fills the body; only the active one is shown.
+   Hidden ones keep running, so they must keep their size — a
+   collapsed element would report zero rows to the pty. */
+.otm-session {
+  position: absolute;
+  inset: 0;
+  background: var(--otm-term-bg, #1e1e1e);
+  padding: var(--otm-sp-2) var(--otm-sp-3) var(--otm-sp-1);
+  overflow: hidden;
+}
+
+.otm-session.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* First-run panel: the native runtime has to be fetched before there is a
+   shell to show. Deliberately plain — it states what will be downloaded and
+   from where, and waits for a click. */
+.otm-setup {
+  max-width: 560px;
+  padding: var(--otm-sp-7) var(--otm-sp-6);
+  font-size: 13px;
+}
+
+.otm-setup-title {
+  font-size: 15px;
+  font-weight: var(--font-semibold);
+  color: var(--text-normal);
+}
+
+.otm-setup-body {
+  margin-top: var(--otm-sp-4);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.otm-setup-url {
+  display: block;
+  margin-top: var(--otm-sp-5);
+  padding: var(--otm-sp-3) var(--otm-sp-4);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  font-size: 11px;
+  word-break: break-all;
+  color: var(--text-muted);
+}
+
+.otm-setup-status {
+  margin: var(--otm-sp-5) 0;
+  min-height: 18px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.otm-setup-status.is-error {
+  color: var(--text-error);
+}
+
+.otm-error {
+  padding: var(--otm-sp-6);
+  font-size: 13px;
+  color: var(--text-error);
+}
+
+.otm-error-title {
+  font-weight: var(--font-semibold);
+}
+
+.otm-error-hint {
+  margin-top: var(--otm-sp-2);
+  color: var(--text-muted);
+}
+
+.otm-error pre {
+  margin-top: var(--otm-sp-4);
+  max-height: 120px;
+  overflow: auto;
+  font-size: 11px;
+  white-space: pre-wrap;
+}
+
+/* ── Settings tab ───────────────────────────────────── */
+.otm-settings .otm-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-5);
+  padding: var(--otm-sp-6) 0 var(--otm-sp-7);
+}
+
+.otm-settings .otm-hero-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fixed box reserved for the icon, not spacing */
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-m);
+  background: var(--background-modifier-hover);
+  color: var(--text-accent);
+}
+
+.otm-settings .otm-hero-mark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.otm-settings .otm-hero-title {
+  font-size: 20px;
+  font-weight: var(--font-bold);
+}
+
+.otm-settings .otm-hero-subtitle {
+  margin-top: var(--otm-sp-1);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.otm-settings .otm-card {
+  margin-bottom: var(--otm-sp-6);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--background-primary);
+}
+
+.otm-settings .otm-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--otm-sp-5);
+  padding: var(--otm-sp-5) var(--otm-sp-6);
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+}
+
+.otm-settings .otm-card-icon {
+  display: flex;
+  color: var(--text-muted);
+}
+
+.otm-settings .otm-card-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.otm-settings .otm-card-title {
+  font-weight: var(--font-semibold);
+}
+
+.otm-settings .otm-card-subtitle {
+  margin-top: var(--otm-sp-1);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.otm-settings .otm-card-body {
+  padding: 0 var(--otm-sp-6);
+}
+
+.otm-settings .otm-card-body .setting-item:last-child {
+  border-bottom: none;
+}
+
+.otm-settings .otm-card-note {
+  padding: 0 var(--otm-sp-6) var(--otm-sp-5);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.otm-settings .otm-value {
+  margin-right: var(--otm-sp-4);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* The test result needs a full row of its own under the button */
+.otm-settings .setting-item.otm-has-result {
+  flex-wrap: wrap;
+}
+
+.otm-settings .otm-result {
+  flex-basis: 100%;
+  margin-top: var(--otm-sp-4);
+  padding: var(--otm-sp-4) var(--otm-sp-5);
+  border-radius: var(--radius-s);
+  font-size: 12px;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+}
+
+.otm-settings .otm-result:empty {
+  display: none;
+}
+
+.otm-settings .otm-result.is-ok {
+  border-left: 4px solid var(--color-green);
+  color: var(--text-normal);
+}
+
+.otm-settings .otm-result.is-error {
+  border-left: 4px solid var(--text-error);
+  color: var(--text-error);
+}
+/* ── xterm.js 6.0.0 bundled styles ──────────────────
+   Source: node_modules/@xterm/xterm/css/xterm.css
+   Paste this section again after upgrading @xterm/xterm.
+   Do not hand-edit it.
+   ──────────────────────────────────────────────── */
+/**
+ * Copyright (c) 2014 The xterm.js authors. All rights reserved.
+ * Copyright (c) 2012-2013, Christopher Jeffrey (MIT License)
+ * https://github.com/chjj/term.js
+ * @license MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * Originally forked from (with the author's permission):
+ *   Fabrice Bellard's javascript vt100 for jslinux:
+ *   http://bellard.org/jslinux/
+ *   Copyright (c) 2011 Fabrice Bellard
+ *   The original design remains. The terminal itself
+ *   has been extended to include xterm CSI codes, among
+ *   other features.
+ */
+
+/**
+ *  Default styles for xterm.js
+ */
+
+.xterm {
+    cursor: text;
+    position: relative;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+.xterm.focus,
+.xterm:focus {
+    outline: none;
+}
+
+.xterm .xterm-helpers {
+    position: absolute;
+    top: 0;
+    /**
+     * The z-index of the helpers must be higher than the canvases in order for
+     * IMEs to appear on top.
+     */
+    z-index: 5;
+}
+
+.xterm .xterm-helper-textarea {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    /* Move textarea out of the screen to the far left, so that the cursor is not visible */
+    position: absolute;
+    opacity: 0;
+    left: -9999em;
+    top: 0;
+    width: 0;
+    height: 0;
+    z-index: -5;
+    /** Prevent wrapping so the IME appears against the textarea at the correct position */
+    white-space: nowrap;
+    overflow: hidden;
+    resize: none;
+}
+
+.xterm .composition-view {
+    /* TODO: Composition position got messed up somewhere */
+    background: #000;
+    color: #FFF;
+    display: none;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.xterm .composition-view.active {
+    display: block;
+}
+
+.xterm .xterm-viewport {
+    /* On OS X this is required in order for the scroll bar to appear fully opaque */
+    background-color: #000;
+    overflow-y: scroll;
+    cursor: default;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.xterm .xterm-screen {
+    position: relative;
+}
+
+.xterm .xterm-screen canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.xterm-char-measure-element {
+    display: inline-block;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: -9999em;
+    line-height: normal;
+}
+
+.xterm.enable-mouse-events {
+    /* When mouse events are enabled (eg. tmux), revert to the standard pointer cursor */
+    cursor: default;
+}
+
+.xterm.xterm-cursor-pointer,
+.xterm .xterm-cursor-pointer {
+    cursor: pointer;
+}
+
+.xterm.column-select.focus {
+    /* Column selection mode */
+    cursor: crosshair;
+}
+
+.xterm .xterm-accessibility:not(.debug),
+.xterm .xterm-message {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    color: transparent;
+    pointer-events: none;
+}
+
+.xterm .xterm-accessibility-tree:not(.debug) *::selection {
+  color: transparent;
+}
+
+.xterm .xterm-accessibility-tree {
+  font-family: monospace;
+  user-select: text;
+  white-space: pre;
+}
+
+.xterm .xterm-accessibility-tree > div {
+  transform-origin: left;
+  width: fit-content;
+}
+
+.xterm .live-region {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.xterm-dim {
+    /* Dim should not apply to background, so the opacity of the foreground color is applied
+     * explicitly in the generated class and reset to 1 here */
+    opacity: 1 !important;
+}
+
+.xterm-underline-1 { text-decoration: underline; }
+.xterm-underline-2 { text-decoration: double underline; }
+.xterm-underline-3 { text-decoration: wavy underline; }
+.xterm-underline-4 { text-decoration: dotted underline; }
+.xterm-underline-5 { text-decoration: dashed underline; }
+
+.xterm-overline {
+    text-decoration: overline;
+}
+
+.xterm-overline.xterm-underline-1 { text-decoration: overline underline; }
+.xterm-overline.xterm-underline-2 { text-decoration: overline double underline; }
+.xterm-overline.xterm-underline-3 { text-decoration: overline wavy underline; }
+.xterm-overline.xterm-underline-4 { text-decoration: overline dotted underline; }
+.xterm-overline.xterm-underline-5 { text-decoration: overline dashed underline; }
+
+.xterm-strikethrough {
+    text-decoration: line-through;
+}
+
+.xterm-screen .xterm-decoration-container .xterm-decoration {
+	z-index: 6;
+	position: absolute;
+}
+
+.xterm-screen .xterm-decoration-container .xterm-decoration.xterm-decoration-top-layer {
+	z-index: 7;
+}
+
+.xterm-decoration-overview-ruler {
+    z-index: 8;
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+}
+
+.xterm-decoration-top {
+    z-index: 2;
+    position: relative;
+}
+
+
+
+/* Derived from vs/base/browser/ui/scrollbar/media/scrollbar.css */
+
+/* xterm.js customization: Override xterm's cursor style */
+.xterm .xterm-scrollable-element > .scrollbar {
+    cursor: default;
+}
+
+/* Arrows */
+.xterm .xterm-scrollable-element > .scrollbar > .scra {
+	cursor: pointer;
+	font-size: 11px !important;
+}
+
+.xterm .xterm-scrollable-element > .visible {
+	opacity: 1;
+
+	/* Background rule added for IE9 - to allow clicks on dom node */
+	background:rgba(0,0,0,0);
+
+	transition: opacity 100ms linear;
+	/* In front of peek view */
+	z-index: 11;
+}
+.xterm .xterm-scrollable-element > .invisible {
+	opacity: 0;
+	pointer-events: none;
+}
+.xterm .xterm-scrollable-element > .invisible.fade {
+	transition: opacity 800ms linear;
+}
+
+/* Scrollable Content Inset Shadow */
+.xterm .xterm-scrollable-element > .shadow {
+	position: absolute;
+	display: none;
+}
+.xterm .xterm-scrollable-element > .shadow.top {
+	display: block;
+	top: 0;
+	left: 3px;
+	height: 3px;
+	width: 100%;
+	box-shadow: var(--vscode-scrollbar-shadow, #000) 0 6px 6px -6px inset;
+}
+.xterm .xterm-scrollable-element > .shadow.left {
+	display: block;
+	top: 3px;
+	left: 0;
+	height: 100%;
+	width: 3px;
+	box-shadow: var(--vscode-scrollbar-shadow, #000) 6px 0 6px -6px inset;
+}
+.xterm .xterm-scrollable-element > .shadow.top-left-corner {
+	display: block;
+	top: 0;
+	left: 0;
+	height: 3px;
+	width: 3px;
+}
+.xterm .xterm-scrollable-element > .shadow.top.left {
+	box-shadow: var(--vscode-scrollbar-shadow, #000) 6px 0 6px -6px inset;
+}
