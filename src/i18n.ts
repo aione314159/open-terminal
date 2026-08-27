@@ -7,12 +7,18 @@
  * individual language, so adding one is a change to that folder alone.
  */
 
+import { getLanguage } from "obsidian";
 import { FALLBACK, LOCALES, type Locale, type StringKey } from "./locales";
 
 /** A language code that has a table, e.g. "en" or "ja" */
 export type Lang = string;
-/** "auto" follows the Obsidian interface language */
-export type LangSetting = "auto" | Lang;
+/**
+ * The stored language preference: either a language code, or the literal
+ * "auto", which follows the Obsidian interface language. It is a plain string
+ * rather than a union with "auto" — Lang is itself string, so the union would
+ * collapse and the literal would only be noise in the type.
+ */
+export type LangSetting = string;
 
 export type { StringKey };
 
@@ -31,21 +37,12 @@ export function isKnownLang(code: string): boolean {
 let current: Locale = BY_CODE.get(FALLBACK) ?? LOCALES[0];
 
 /**
- * Obsidian stores the interface language in localStorage under "language".
- * An empty stored value means English; a missing key means the user never
- * changed it, so fall back to the browser locale. Only the part before the
- * first dash is matched, so "de-AT" and "pt-BR" both resolve the same way as
- * their base language.
+ * The Obsidian interface language, via the app's own API. Only the part before
+ * the first dash is matched, so "de-AT" and "pt-BR" resolve the same way as
+ * their base language; anything without a table falls back to English.
  */
 export function detectLang(): Lang {
-	let stored: string | null = null;
-	try {
-		stored = window.localStorage.getItem("language");
-	} catch {
-		stored = null;
-	}
-	const raw = stored !== null ? stored : (navigator.language ?? "");
-	const base = raw.toLowerCase().split("-")[0];
+	const base = (getLanguage() || "").toLowerCase().split("-")[0];
 	return BY_CODE.has(base) ? base : FALLBACK;
 }
 
