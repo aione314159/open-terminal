@@ -22,8 +22,13 @@ interface NodeProcess {
 	arch: string;
 }
 
-/** The running process: its environment, platform and architecture */
-export const proc: NodeProcess = (globalThis as unknown as { process: NodeProcess }).process;
+/**
+ * The running process: its environment, platform and architecture.
+ *
+ * Reached through `window` rather than `globalThis`, which is what Obsidian
+ * asks for so popout windows resolve against their own context.
+ */
+export const proc: NodeProcess = (window as unknown as { process: NodeProcess }).process;
 
 interface Stats {
 	isDirectory(): boolean;

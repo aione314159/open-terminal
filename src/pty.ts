@@ -18,7 +18,9 @@ export interface PtyApi {
  * prebuilds/ into the plugin folder, so it is loaded by absolute path.
  */
 export function loadPty(pluginDir: string): PtyApi {
-	const req = (window as unknown as { require(m: string): unknown }).require;
+	// A property with a function type, not a method: it is called straight off
+	// the window object and never detached
+	const req = (window as unknown as { require: (m: string) => unknown }).require;
 	return req(`${pluginDir}/node_modules/node-pty/lib/index.js`) as PtyApi;
 }
 
