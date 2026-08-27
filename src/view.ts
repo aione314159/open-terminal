@@ -68,6 +68,7 @@ export class TerminalView extends ItemView {
 		this.actionBtn(actions, "file-symlink", t("term.cdNote"), () => this.cdToNoteFolder());
 		this.actionBtn(actions, "eraser", t("term.clear"), () => this.activeSession()?.clear());
 		this.actionBtn(actions, "rotate-ccw", t("term.restart"), () => this.restartActive());
+		this.actionBtn(actions, "settings", t("term.settings"), () => this.plugin.openSettings());
 
 		this.bodyEl = root.createDiv({ cls: "otm-body" });
 		this.applyAppearance();

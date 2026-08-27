@@ -17,6 +17,7 @@ const ko: Table = {
 	"term.toDark": "어두운 터미널로 전환",
 	"term.newTab": "새 탭",
 	"term.closeTab": "탭 닫기",
+	"term.settings": "플러그인 설정 열기",
 	"term.ended": "[세션이 종료되었습니다 — 다시 시작 버튼을 누르세요]",
 	"term.error.title": "터미널을 시작할 수 없습니다.",
 	"term.error.hint":

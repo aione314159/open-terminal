@@ -21,6 +21,7 @@ const zh = {
 	"term.toDark": "改用深色終端機",
 	"term.newTab": "新增分頁",
 	"term.closeTab": "關閉分頁",
+	"term.settings": "開啟插件設定",
 	"term.ended": "[工作階段已結束，按重開鈕重啟]",
 	"term.error.title": "終端機無法啟動。",
 	"term.error.hint":
@@ -58,7 +59,7 @@ const zh = {
 	"settings.panel.startup.name": "啟動時自動開啟",
 	"settings.panel.startup.desc": "Obsidian 載入完成後，直接在編輯區下方開啟終端機面板。",
 	"settings.panel.ratio.name": "面板高度",
-	"settings.panel.ratio.desc": "佔編輯區的比例；之後仍可直接拖曳中間的分隔線調整。",
+	"settings.panel.ratio.desc": "佔編輯區的百分比；之後仍可直接拖曳中間的分隔線調整。",
 
 	// ── settings: appearance ────────────────────────────────
 	"settings.look.title": "外觀",
@@ -68,7 +69,7 @@ const zh = {
 	"settings.look.theme.dark": "深色",
 	"settings.look.theme.light": "淺色",
 	"settings.look.font.name": "字級",
-	"settings.look.font.desc": "套用到所有分頁，行列數會重新計算。",
+	"settings.look.font.desc": "以 px 為單位，套用到所有分頁，行列數會重新計算。",
 	"settings.restore": "還原預設 {value}",
 
 	// ── settings: language ──────────────────────────────────

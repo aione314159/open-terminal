@@ -17,6 +17,7 @@ const fr: Table = {
 	"term.toDark": "Passer au terminal sombre",
 	"term.newTab": "Nouvel onglet",
 	"term.closeTab": "Fermer l'onglet",
+	"term.settings": "Ouvrir les réglages du plugin",
 	"term.ended": "[Session terminée — appuyez sur le bouton de redémarrage]",
 	"term.error.title": "Le terminal n'a pas pu démarrer.",
 	"term.error.hint":

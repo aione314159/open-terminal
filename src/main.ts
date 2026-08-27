@@ -131,6 +131,18 @@ export default class OpenTerminalPlugin extends Plugin {
 	}
 
 	/**
+	 * Opens the Obsidian settings window on this plugin's own tab.
+	 * `setting` is not public API, hence the assertion.
+	 */
+	openSettings(): void {
+		const setting = (this.app as unknown as {
+			setting: { open(): void; openTabById(id: string): void };
+		}).setting;
+		setting.open();
+		setting.openTabById(this.manifest.id);
+	}
+
+	/**
 	 * Sizes the panel to the configured share of the editor area.
 	 *
 	 * The split sizes tab containers, not leaves, so the leaf's parent is what
@@ -287,7 +299,7 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 	private shellCard(): void {
 		const body = this.card("terminal", t("settings.shell.title"), t("settings.shell.subtitle"));
 
-		new Setting(body)
+		const cwd = new Setting(body)
 			.setName(t("settings.shell.cwd.name"))
 			.setDesc(t("settings.shell.cwd.desc"))
 			.addText((tx) => {
@@ -298,8 +310,11 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				});
 			});
+		// A path is longer than the space left beside the label; this row wraps
+		// so the field gets the full width
+		cwd.settingEl.addClass("otm-stacked");
 
-		new Setting(body)
+		const shell = new Setting(body)
 			.setName(t("settings.shell.path.name"))
 			.setDesc(t("settings.shell.path.desc"))
 			.addText((tx) => {
@@ -310,6 +325,7 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				});
 			});
+		shell.settingEl.addClass("otm-stacked");
 
 		const check = new Setting(body)
 			.setName(t("settings.shell.check.name"))
@@ -358,21 +374,17 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 		const ratio = new Setting(body)
 			.setName(t("settings.panel.ratio.name"))
 			.setDesc(t("settings.panel.ratio.desc"));
-		const ratioValue = ratio.controlEl.createSpan({
-			cls: "otm-value",
-			text: `${this.plugin.settings.panelRatio} %`,
-		});
 		ratio.addSlider((sl) => {
 			sl.setLimits(MIN_RATIO, MAX_RATIO, 5);
 			sl.setValue(this.plugin.settings.panelRatio);
+			// Obsidian renders the current value beside the slider itself; the
+			// unit lives in the description rather than a second number here
+			sl.setDynamicTooltip();
 			sl.onChange(async (v) => {
 				this.plugin.settings.panelRatio = v;
-				ratioValue.setText(`${v} %`);
 				this.plugin.applyPanelHeight();
 				await this.plugin.saveSettings();
 			});
-			// The number sits left of the slider, so the slider does not repeat it
-			ratio.controlEl.insertBefore(ratioValue, sl.sliderEl);
 		});
 		ratio.addExtraButton((b) => {
 			b.setIcon("rotate-ccw");
@@ -411,20 +423,15 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 		const font = new Setting(body)
 			.setName(t("settings.look.font.name"))
 			.setDesc(t("settings.look.font.desc"));
-		const fontValue = font.controlEl.createSpan({
-			cls: "otm-value",
-			text: `${this.plugin.settings.fontSize} px`,
-		});
 		font.addSlider((sl) => {
 			sl.setLimits(MIN_FONT, MAX_FONT, 1);
 			sl.setValue(this.plugin.settings.fontSize);
+			sl.setDynamicTooltip();
 			sl.onChange(async (v) => {
 				this.plugin.settings.fontSize = v;
-				fontValue.setText(`${v} px`);
 				this.plugin.applyAppearance();
 				await this.plugin.saveSettings();
 			});
-			font.controlEl.insertBefore(fontValue, sl.sliderEl);
 		});
 		font.addExtraButton((b) => {
 			b.setIcon("rotate-ccw");

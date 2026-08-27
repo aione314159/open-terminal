@@ -16,6 +16,7 @@ const en: Table = {
 	"term.toDark": "Switch to a dark terminal",
 	"term.newTab": "New tab",
 	"term.closeTab": "Close tab",
+	"term.settings": "Open the plugin settings",
 	"term.ended": "[Session ended — press the restart button to start a new one]",
 	"term.error.title": "The terminal could not start.",
 	"term.error.hint":
@@ -55,7 +56,7 @@ const en: Table = {
 		"Open the terminal panel below the editor as soon as Obsidian has finished loading.",
 	"settings.panel.ratio.name": "Panel height",
 	"settings.panel.ratio.desc":
-		"Share of the editor area. You can still drag the divider afterwards.",
+		"Percentage of the editor area. You can still drag the divider afterwards.",
 
 	"settings.look.title": "Appearance",
 	"settings.look.subtitle": "The terminal's own palette and font size",
@@ -65,7 +66,8 @@ const en: Table = {
 	"settings.look.theme.dark": "Dark",
 	"settings.look.theme.light": "Light",
 	"settings.look.font.name": "Font size",
-	"settings.look.font.desc": "Applies to every tab; rows and columns are recalculated.",
+	"settings.look.font.desc":
+		"In pixels. Applies to every tab; rows and columns are recalculated.",
 	"settings.restore": "Restore default ({value})",
 
 	"settings.language.title": "Language",

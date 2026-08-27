@@ -17,6 +17,7 @@ const de: Table = {
 	"term.toDark": "Zu dunklem Terminal wechseln",
 	"term.newTab": "Neuer Tab",
 	"term.closeTab": "Tab schließen",
+	"term.settings": "Plugin-Einstellungen öffnen",
 	"term.ended": "[Sitzung beendet — mit der Neustart-Schaltfläche neu starten]",
 	"term.error.title": "Das Terminal konnte nicht starten.",
 	"term.error.hint":

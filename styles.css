@@ -277,6 +277,20 @@ body {
 }
 
 /* ── Settings tab ───────────────────────────────────── */
+/* Obsidian's own variables, re-pointed rather than overridden with selectors:
+   every .setting-item is drawn as a tinted, rounded block of its own, which
+   inside these cards reads as a card within a card. */
+.otm-settings {
+  --setting-items-background: transparent;
+  --setting-items-border-width: 0;
+  --setting-items-radius: 0;
+  /* The only source of horizontal padding on this page. The card head and every
+     row read from it, so their separators share the same left and right ends —
+     a container padding plus a row padding would give two different line
+     lengths and read as misaligned. */
+  --otm-gutter: var(--size-4-5);
+}
+
 .otm-settings .otm-hero {
   display: flex;
   align-items: center;
@@ -324,7 +338,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--otm-sp-5);
-  padding: var(--otm-sp-5) var(--otm-sp-6);
+  padding: var(--otm-sp-5) var(--otm-gutter);
   border-bottom: 1px solid var(--background-modifier-border);
   background: var(--background-secondary);
 }
@@ -349,25 +363,46 @@ body {
   color: var(--text-muted);
 }
 
+/* No padding of its own: the rows carry the gutter, so every separator runs
+   between the same two x positions as the card head's border */
 .otm-settings .otm-card-body {
-  padding: 0 var(--otm-sp-6);
+  padding: 0;
 }
 
-.otm-settings .otm-card-body .setting-item:last-child {
-  border-bottom: none;
+/* Obsidian writes padding and margin-bottom as literals, not variables, so
+   these two are the one place a selector has to override rather than re-point */
+.otm-settings .otm-card-body .setting-item {
+  padding: var(--otm-sp-5) var(--otm-gutter);
+  margin-bottom: 0;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.otm-settings .otm-card-body > *:first-child {
+  border-top: none;
 }
 
 .otm-settings .otm-card-note {
-  padding: 0 var(--otm-sp-6) var(--otm-sp-5);
+  padding: 0 var(--otm-gutter) var(--otm-sp-5);
   font-size: 12px;
   color: var(--text-muted);
 }
 
-.otm-settings .otm-value {
-  margin-right: var(--otm-sp-4);
+/* A .setting-item is a single flex line. Rows that need the control on its own
+   line opt in; the rest are untouched. */
+.otm-settings .setting-item.otm-stacked {
+  flex-wrap: wrap;
+}
+
+.otm-settings .setting-item.otm-stacked .setting-item-control {
+  flex-basis: 100%;
+  margin-top: var(--otm-sp-4);
+  justify-content: flex-start;
+}
+
+.otm-settings .setting-item.otm-stacked .setting-item-control input[type="text"] {
+  width: 100%;
   font-family: var(--font-monospace);
   font-size: 12px;
-  color: var(--text-muted);
 }
 
 /* The test result needs a full row of its own under the button */
@@ -398,6 +433,7 @@ body {
   border-left: 4px solid var(--text-error);
   color: var(--text-error);
 }
+
 /* ── xterm.js 6.0.0 bundled styles ──────────────────
    Source: node_modules/@xterm/xterm/css/xterm.css
    Paste this section again after upgrading @xterm/xterm.

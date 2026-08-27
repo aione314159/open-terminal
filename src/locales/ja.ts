@@ -17,6 +17,7 @@ const ja: Table = {
 	"term.toDark": "ダークテーマに切り替え",
 	"term.newTab": "新しいタブ",
 	"term.closeTab": "タブを閉じる",
+	"term.settings": "プラグイン設定を開く",
 	"term.ended": "[セッションが終了しました — 再起動ボタンで新しく開始できます]",
 	"term.error.title": "ターミナルを起動できませんでした。",
 	"term.error.hint":
