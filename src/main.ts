@@ -1,6 +1,6 @@
-import { existsSync, statSync } from "fs";
 import { Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, setIcon } from "obsidian";
 import { isKnownLang, locales, setLang, t, type LangSetting } from "./i18n";
+import { fileExists, isDirectory, proc } from "./node";
 import { expandHome } from "./paths";
 import { TerminalView, VIEW_TYPE_TERMINAL } from "./view";
 import type { TermTheme } from "./theme";
@@ -178,7 +178,7 @@ export default class OpenTerminalPlugin extends Plugin {
 		if (configured.length > 0) {
 			const abs = expandHome(configured);
 			try {
-				if (existsSync(abs) && statSync(abs).isDirectory()) return abs;
+				if (fileExists(abs) && isDirectory(abs)) return abs;
 			} catch {
 				// Unreadable path; fall through to the vault
 			}
@@ -190,7 +190,7 @@ export default class OpenTerminalPlugin extends Plugin {
 	shellPath(): string {
 		const configured = this.settings.shellPath.trim();
 		if (configured.length > 0) return expandHome(configured);
-		return process.env.SHELL || "/bin/zsh";
+		return proc.env.SHELL || "/bin/zsh";
 	}
 
 	/**
@@ -303,7 +303,7 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 			.setName(t("settings.shell.path.name"))
 			.setDesc(t("settings.shell.path.desc"))
 			.addText((tx) => {
-				tx.setPlaceholder(process.env.SHELL || "/bin/zsh");
+				tx.setPlaceholder(proc.env.SHELL || "/bin/zsh");
 				tx.setValue(this.plugin.settings.shellPath);
 				tx.onChange(async (v) => {
 					this.plugin.settings.shellPath = v;
@@ -325,8 +325,8 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 				const shell = this.plugin.shellPath();
 				const cwd = this.plugin.defaultCwd();
 				const problems: string[] = [];
-				if (!existsSync(shell)) problems.push(t("settings.shell.check.noShell", { path: shell }));
-				if (!existsSync(`${this.plugin.pluginDir()}/node_modules/node-pty/lib/index.js`)) {
+				if (!fileExists(shell)) problems.push(t("settings.shell.check.noShell", { path: shell }));
+				if (!fileExists(`${this.plugin.pluginDir()}/node_modules/node-pty/lib/index.js`)) {
 					problems.push(t("settings.shell.check.noPty"));
 				}
 				if (problems.length > 0) {
@@ -456,7 +456,7 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 				for (const loc of locales()) dd.addOption(loc.code, loc.label);
 				dd.setValue(this.plugin.settings.language);
 				dd.onChange(async (v) => {
-					this.plugin.settings.language = v as LangSetting;
+					this.plugin.settings.language = v;
 					await this.plugin.saveSettings();
 					this.plugin.applyLanguage();
 					new Notice(t("settings.language.changed"));

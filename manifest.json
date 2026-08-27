@@ -1,8 +1,8 @@
 {
   "id": "open-terminal-panel",
   "name": "Open Terminal Panel",
-  "version": "1.0.1",
-  "minAppVersion": "1.7.2",
+  "version": "1.0.2",
+  "minAppVersion": "1.8.7",
   "description": "A real terminal below the editor: several shells in tabs, each with a real TTY, plus one-click cd to your vault or to the folder of the note you are editing.",
   "author": "aione",
   "isDesktopOnly": true,

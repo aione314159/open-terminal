@@ -1,12 +1,15 @@
 import type { IPty } from "node-pty";
+import { proc } from "./node";
 
 /** Only spawn is used; the rest of the node-pty API is not needed here */
 export interface PtyApi {
-	spawn(
+	// A property with a function type rather than a method: it is never
+	// detached from the module object, and this shape says so
+	spawn: (
 		file: string,
 		args: string[],
 		opt: { name: string; cols: number; rows: number; cwd: string; env: Record<string, string> },
-	): IPty;
+	) => IPty;
 }
 
 /**
@@ -26,7 +29,7 @@ export function loadPty(pluginDir: string): PtyApi {
  */
 export function shellEnv(): Record<string, string> {
 	const env: Record<string, string> = {};
-	for (const [k, v] of Object.entries(process.env)) if (typeof v === "string") env[k] = v;
+	for (const [k, v] of Object.entries(proc.env)) if (typeof v === "string") env[k] = v;
 	env.TERM = "xterm-256color";
 	env.COLORTERM = "truecolor";
 	return env;

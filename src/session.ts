@@ -3,6 +3,7 @@ import { Terminal } from "@xterm/xterm";
 import type { IPty } from "node-pty";
 import { t } from "./i18n";
 import { baseName } from "./paths";
+import { proc } from "./node";
 import { loadPty, shellEnv, type PtyApi } from "./pty";
 import { archiveUrl, install, isInstalled, platformTag } from "./runtime";
 import { shellQuote } from "./shell";
@@ -230,7 +231,7 @@ export class TerminalSession {
 		if (platformTag() === null) {
 			box.createDiv({
 				cls: "otm-setup-status is-error",
-				text: t("runtime.unsupported", { platform: `${process.platform}-${process.arch}` }),
+				text: t("runtime.unsupported", { platform: `${proc.platform}-${proc.arch}` }),
 			});
 			this.onExit?.();
 			return;

@@ -1,7 +1,5 @@
-import { createHash } from "crypto";
-import { chmodSync, existsSync, mkdirSync, writeFileSync } from "fs";
-import { gunzipSync } from "zlib";
 import { requestUrl } from "obsidian";
+import { fileExists, gunzip, makeDir, proc, setMode, sha256, writeFile } from "./node";
 import { dirName } from "./paths";
 
 /**
@@ -33,7 +31,7 @@ const PLATFORMS: Record<string, string> = {
 };
 
 export function platformTag(): string | null {
-	const key = `${process.platform}-${process.arch}`;
+	const key = `${proc.platform}-${proc.arch}`;
 	return PLATFORMS[key] ?? null;
 }
 
@@ -43,7 +41,7 @@ export function archiveUrl(version: string): string {
 }
 
 export function isInstalled(pluginDir: string): boolean {
-	return existsSync(`${pluginDir}/${PTY_ENTRY}`);
+	return fileExists(`${pluginDir}/${PTY_ENTRY}`);
 }
 
 export interface InstallReport {
@@ -59,7 +57,7 @@ export interface InstallReport {
  */
 export async function install(pluginDir: string, version: string): Promise<InstallReport> {
 	if (platformTag() === null) {
-		throw new Error(`unsupported platform: ${process.platform}-${process.arch}`);
+		throw new Error(`unsupported platform: ${proc.platform}-${proc.arch}`);
 	}
 	const url = archiveUrl(version);
 	const res = await requestUrl({ url, throw: false });
@@ -67,17 +65,18 @@ export async function install(pluginDir: string, version: string): Promise<Insta
 		throw new Error(`${url} returned HTTP ${res.status}`);
 	}
 
-	const gz = Buffer.from(res.arrayBuffer);
+	// Uint8Array rather than Buffer: both are accepted downstream, and this one
+	// needs no Node global to be typed
+	const gz = new Uint8Array(res.arrayBuffer);
 	// Recorded and shown after the install so a user can compare it with the
 	// checksum published next to the release
-	const sha256 = createHash("sha256").update(gz).digest("hex");
-	const tar = gunzipSync(gz);
-	const files = unpack(tar, pluginDir);
+	const digest = sha256(gz);
+	const files = unpack(gunzip(gz), pluginDir);
 
 	if (!isInstalled(pluginDir)) {
 		throw new Error(`archive did not contain ${PTY_ENTRY}`);
 	}
-	return { files, bytes: gz.length, sha256 };
+	return { files, bytes: gz.length, sha256: digest };
 }
 
 /**
@@ -89,7 +88,7 @@ export async function install(pluginDir: string, version: string): Promise<Insta
  * Exported for cli/test_unpack.mjs: getting this wrong breaks the install for
  * every store user at once, so it is checked against a real archive.
  */
-export function unpack(tar: Buffer, dest: string): number {
+export function unpack(tar: Uint8Array, dest: string): number {
 	const BLOCK = 512;
 	let offset = 0;
 	let written = 0;
@@ -115,15 +114,15 @@ export function unpack(tar: Buffer, dest: string): number {
 		const target = `${dest}/${path}`;
 
 		if (type === "5") {
-			mkdirSync(target, { recursive: true });
+			makeDir(target, { recursive: true });
 			continue;
 		}
 		if (type !== "0" && type !== "\0") continue;
 
-		mkdirSync(dirName(target), { recursive: true });
-		writeFileSync(target, body);
+		makeDir(dirName(target), { recursive: true });
+		writeFile(target, body);
 		// spawn-helper is executed by node-pty and is useless without +x
-		if (mode & 0o111) chmodSync(target, 0o755);
+		if (mode & 0o111) setMode(target, 0o755);
 		written++;
 	}
 	return written;
@@ -135,12 +134,14 @@ function isSafePath(path: string): boolean {
 	return !path.split("/").includes("..");
 }
 
-function cstring(buf: Buffer): string {
+const decoder = new TextDecoder();
+
+function cstring(buf: Uint8Array): string {
 	const end = buf.indexOf(0);
-	return buf.subarray(0, end === -1 ? buf.length : end).toString("utf8").trim();
+	return decoder.decode(buf.subarray(0, end === -1 ? buf.length : end)).trim();
 }
 
-function octal(buf: Buffer): number {
+function octal(buf: Uint8Array): number {
 	const text = cstring(buf);
 	return text === "" ? 0 : parseInt(text, 8) || 0;
 }
