@@ -28,7 +28,11 @@ export interface OpenTerminalSettings {
 	workingDir: string;
 	/** Shell to launch; empty means $SHELL, and /bin/zsh when even that is unset */
 	shellPath: string;
-	/** Open the panel automatically once the workspace is ready */
+	/**
+	 * Open the panel on every start, even when the last session ended with it
+	 * closed. Off, the panel simply follows the saved workspace: it comes back
+	 * only if it was open when Obsidian was last quit.
+	 */
 	openOnStartup: boolean;
 	/** Height of the bottom panel as a percentage of the editor area */
 	panelRatio: number;
@@ -43,7 +47,7 @@ export interface OpenTerminalSettings {
 const DEFAULT_SETTINGS: OpenTerminalSettings = {
 	workingDir: "",
 	shellPath: "",
-	openOnStartup: true,
+	openOnStartup: false,
 	panelRatio: DEFAULT_RATIO,
 	terminalTheme: "dark",
 	fontSize: DEFAULT_FONT,
@@ -81,6 +85,10 @@ export default class OpenTerminalPlugin extends Plugin {
 
 		this.addSettingTab(new OpenTerminalSettingTab(this));
 
+		// Obsidian stores the panel in the workspace layout and brings it back on
+		// its own, so a panel that was closed before quitting stays closed. Only
+		// the "always" setting adds one that the layout does not have.
+		//
 		// Waiting for layout-ready matters twice: the vault path is only settled
 		// by then, and a workspace restored with the panel already in it must not
 		// get a second one.

@@ -56,8 +56,9 @@ const zh = {
 	// ── settings: panel ─────────────────────────────────────
 	"settings.panel.title": "面板",
 	"settings.panel.subtitle": "終端機在編輯區下方的開啟方式",
-	"settings.panel.startup.name": "啟動時自動開啟",
-	"settings.panel.startup.desc": "Obsidian 載入完成後，直接在編輯區下方開啟終端機面板。",
+	"settings.panel.startup.name": "每次啟動都開啟",
+	"settings.panel.startup.desc":
+		"每次啟動都開啟面板。關閉時，只有上次離開 Obsidian 前面板是開著的才會回來。",
 	"settings.panel.ratio.name": "面板高度",
 	"settings.panel.ratio.desc": "佔編輯區的百分比；之後仍可直接拖曳中間的分隔線調整。",
 

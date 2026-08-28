@@ -14,7 +14,7 @@ server and colored output all behave the way they do in your terminal app.
 
 ## What it does
 
-- **Opens below the editor**, automatically when Obsidian starts. Its height is a
+- **Opens below the editor**, and comes back on the next start if you left it open. Its height is a
   share of the editor area that you set once; the divider stays draggable.
 - **Tabs.** Each tab is its own shell. Closing one kills that shell and nothing else,
   and a shell that exits keeps its output so you can still read what happened.
@@ -79,7 +79,7 @@ restart to get a live shell back in the same folder.
 |---|---|---|
 | Working folder | vault folder | Where new tabs start. `~` is expanded. A folder that no longer exists falls back to the vault. |
 | Shell path | `$SHELL` | Started as a login shell, so `PATH` and your profile are complete — Obsidian is launched from the GUI and inherits almost nothing. |
-| Open on startup | on | Opens the panel once the workspace is ready. |
+| Always open on startup | off | Opens the panel on every start. Off, the panel follows the saved workspace: it comes back only if it was open when you quit. |
 | Panel height | 30 % | Share of the editor area. |
 | Palette | dark | Terminal only; does not follow the Obsidian theme. |
 | Font size | 12 px | Applies to every tab. |

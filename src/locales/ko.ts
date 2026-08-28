@@ -51,8 +51,9 @@ const ko: Table = {
 
 	"settings.panel.title": "패널",
 	"settings.panel.subtitle": "편집 영역 아래에서 열리는 방식",
-	"settings.panel.startup.name": "시작할 때 열기",
-	"settings.panel.startup.desc": "Obsidian 로딩이 끝나면 편집 영역 아래에 터미널 패널을 엽니다.",
+	"settings.panel.startup.name": "시작할 때마다 열기",
+	"settings.panel.startup.desc":
+		"시작할 때마다 패널을 엽니다. 끄면 Obsidian을 끝낼 때 열려 있던 경우에만 다시 열립니다.",
 	"settings.panel.ratio.name": "패널 높이",
 	"settings.panel.ratio.desc": "편집 영역에서 차지하는 비율이며, 이후 구분선을 끌어 조절할 수 있습니다.",
 

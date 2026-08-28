@@ -52,9 +52,9 @@ const fr: Table = {
 
 	"settings.panel.title": "Panneau",
 	"settings.panel.subtitle": "Comment le terminal s'ouvre sous l'éditeur",
-	"settings.panel.startup.name": "Ouvrir au démarrage",
+	"settings.panel.startup.name": "Toujours ouvrir au démarrage",
 	"settings.panel.startup.desc":
-		"Ouvre le panneau terminal sous l'éditeur dès qu'Obsidian a fini de charger.",
+		"Ouvre le panneau à chaque démarrage. Désactivé, il revient seulement s'il était ouvert à la fermeture.",
 	"settings.panel.ratio.name": "Hauteur du panneau",
 	"settings.panel.ratio.desc":
 		"Part de la zone d'édition. Le séparateur reste déplaçable ensuite.",

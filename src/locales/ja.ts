@@ -52,9 +52,9 @@ const ja: Table = {
 
 	"settings.panel.title": "パネル",
 	"settings.panel.subtitle": "エディタ下部での開き方",
-	"settings.panel.startup.name": "起動時に開く",
+	"settings.panel.startup.name": "起動のたびに開く",
 	"settings.panel.startup.desc":
-		"Obsidian の読み込みが完了したら、エディタ下部にターミナルパネルを開きます。",
+		"起動のたびにパネルを開きます。オフの場合、終了時に開いていたときだけ復元されます。",
 	"settings.panel.ratio.name": "パネルの高さ",
 	"settings.panel.ratio.desc": "エディタ領域に対する割合。後から仕切りをドラッグして調整できます。",
 

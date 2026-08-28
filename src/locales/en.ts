@@ -51,9 +51,9 @@ const en: Table = {
 
 	"settings.panel.title": "Panel",
 	"settings.panel.subtitle": "How the terminal opens below the editor",
-	"settings.panel.startup.name": "Open on startup",
+	"settings.panel.startup.name": "Always open on startup",
 	"settings.panel.startup.desc":
-		"Open the terminal panel below the editor as soon as Obsidian has finished loading.",
+		"Open the panel on every start. Off, it comes back only when it was open as you quit Obsidian.",
 	"settings.panel.ratio.name": "Panel height",
 	"settings.panel.ratio.desc":
 		"Percentage of the editor area. You can still drag the divider afterwards.",

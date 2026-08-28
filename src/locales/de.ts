@@ -53,9 +53,9 @@ const de: Table = {
 
 	"settings.panel.title": "Bereich",
 	"settings.panel.subtitle": "Wie sich das Terminal unter dem Editor öffnet",
-	"settings.panel.startup.name": "Beim Start öffnen",
+	"settings.panel.startup.name": "Immer beim Start öffnen",
 	"settings.panel.startup.desc":
-		"Öffnet den Terminal-Bereich unter dem Editor, sobald Obsidian geladen ist.",
+		"Öffnet den Bereich bei jedem Start. Aus: Er kehrt nur zurück, wenn er beim Beenden offen war.",
 	"settings.panel.ratio.name": "Höhe des Bereichs",
 	"settings.panel.ratio.desc":
 		"Anteil am Editorbereich. Der Trenner lässt sich danach weiterhin ziehen.",
