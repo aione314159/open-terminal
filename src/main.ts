@@ -253,6 +253,16 @@ export default class OpenTerminalPlugin extends Plugin {
 	}
 }
 
+/**
+ * The settings page is drawn by `display()` rather than the declarative
+ * `getSettingDefinitions()` API added in 1.13.
+ *
+ * That API renders a group as a bare heading: it takes no icon, no subtitle,
+ * and no custom render hook, so the cards here — icon, title and a line saying
+ * what the section is for — cannot survive the move. Adopting it would also
+ * push minAppVersion from 1.8.7 to 1.13.0. What it buys is appearing in
+ * Obsidian's settings search; that trade was made deliberately, not missed.
+ */
 class OpenTerminalSettingTab extends PluginSettingTab {
 	private plugin: OpenTerminalPlugin;
 
