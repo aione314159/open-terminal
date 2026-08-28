@@ -379,7 +379,6 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 			sl.setValue(this.plugin.settings.panelRatio);
 			// Obsidian renders the current value beside the slider itself; the
 			// unit lives in the description rather than a second number here
-			sl.setDynamicTooltip();
 			sl.onChange(async (v) => {
 				this.plugin.settings.panelRatio = v;
 				this.plugin.applyPanelHeight();
@@ -426,7 +425,6 @@ class OpenTerminalSettingTab extends PluginSettingTab {
 		font.addSlider((sl) => {
 			sl.setLimits(MIN_FONT, MAX_FONT, 1);
 			sl.setValue(this.plugin.settings.fontSize);
-			sl.setDynamicTooltip();
 			sl.onChange(async (v) => {
 				this.plugin.settings.fontSize = v;
 				this.plugin.applyAppearance();

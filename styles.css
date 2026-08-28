@@ -103,8 +103,7 @@ body {
 /* A shell that exited keeps its output; the strike-through says
    the tab is a transcript, not a live session */
 .otm-tab.is-dead .otm-tab-title {
-  /* Longhand: Obsidian's CSS lint flags the text-decoration shorthand */
-  text-decoration-line: line-through;
+  text-decoration: line-through;
   color: var(--text-faint);
 }
 
@@ -619,9 +618,11 @@ body {
    * `opacity: 1 !important` and `font-size: 11px !important` are written with
      a `.xterm` ancestor instead. The extra specificity beats the generated
      class the same way, without !important.
-   * The `text-decoration` shorthand is split into longhand. Obsidian's CSS
-     lint reports the shorthand as only partially supported; the longhand
-     properties are what the shorthand expands to, so rendering is unchanged.
+   The `text-decoration` rules are left exactly as upstream wrote them. The
+   review lint reports them as only partially supported by Obsidian 1.7.4, but
+   splitting them into longhand makes it worse — it counts each longhand
+   property as well — and dropping them would remove the underline, overline
+   and strikethrough attributes the terminal actually renders.
 
    Nothing else in this file is hand-edited. */
 
@@ -631,24 +632,24 @@ body {
     opacity: 1;
 }
 
-.xterm-underline-1 { text-decoration-line: underline; }
-.xterm-underline-2 { text-decoration-line: underline; text-decoration-style: double; }
-.xterm-underline-3 { text-decoration-line: underline; text-decoration-style: wavy; }
-.xterm-underline-4 { text-decoration-line: underline; text-decoration-style: dotted; }
-.xterm-underline-5 { text-decoration-line: underline; text-decoration-style: dashed; }
+.xterm-underline-1 { text-decoration: underline; }
+.xterm-underline-2 { text-decoration: double underline; }
+.xterm-underline-3 { text-decoration: wavy underline; }
+.xterm-underline-4 { text-decoration: dotted underline; }
+.xterm-underline-5 { text-decoration: dashed underline; }
 
 .xterm-overline {
-    text-decoration-line: overline;
+    text-decoration: overline;
 }
 
-.xterm-overline.xterm-underline-1 { text-decoration-line: overline underline; }
-.xterm-overline.xterm-underline-2 { text-decoration-line: overline underline; text-decoration-style: double; }
-.xterm-overline.xterm-underline-3 { text-decoration-line: overline underline; text-decoration-style: wavy; }
-.xterm-overline.xterm-underline-4 { text-decoration-line: overline underline; text-decoration-style: dotted; }
-.xterm-overline.xterm-underline-5 { text-decoration-line: overline underline; text-decoration-style: dashed; }
+.xterm-overline.xterm-underline-1 { text-decoration: overline underline; }
+.xterm-overline.xterm-underline-2 { text-decoration: overline double underline; }
+.xterm-overline.xterm-underline-3 { text-decoration: overline wavy underline; }
+.xterm-overline.xterm-underline-4 { text-decoration: overline dotted underline; }
+.xterm-overline.xterm-underline-5 { text-decoration: overline dashed underline; }
 
 .xterm-strikethrough {
-    text-decoration-line: line-through;
+    text-decoration: line-through;
 }
 
 .xterm-screen .xterm-decoration-container .xterm-decoration {
