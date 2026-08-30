@@ -16,6 +16,10 @@ const chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const W = 1672
 const H = 941
 
+// Obsidian's store gallery wants 3:2 and English-only text.
+const SW = 1200
+const SH = 800
+
 const CJK = "'PingFang TC','Hiragino Sans','Apple SD Gothic Neo',"
 
 const locales = {
@@ -230,22 +234,42 @@ const page = (l) => `<!doctype html>
 </div></div>
 `
 
+// 3:2 restyle of the same elements: title stacked over a full-width mock-up.
+const storeSkin = `
+  html, body { width: ${SW}px; height: ${SH}px; }
+  h1 { left: 66px; top: 62px; font-size: 60px; letter-spacing: -2px; }
+  .tagline { left: 68px; top: 152px; font-size: 29px; }
+  .tags { left: 70px; bottom: 46px; font-size: 18px; }
+  .frame { right: auto; left: 68px; top: 232px; width: 1064px; height: 470px; }
+  .editor { height: 150px; padding: 20px 28px; }
+`
+
 mkdirSync(out, { recursive: true })
 const tmp = tmpdir()
 
-for (const [lang, l] of Object.entries(locales)) {
-  const html = resolve(tmp, `hero.${lang}.html`)
-  const png = resolve(out, `hero.${lang}.png`)
-  writeFileSync(html, page(l))
+const shoot = (html, png, w, h) => {
   execFileSync(chrome, [
     '--headless=new',
     '--disable-gpu',
     '--hide-scrollbars',
     '--force-device-scale-factor=1',
-    `--window-size=${W},${H}`,
+    `--window-size=${w},${h}`,
     `--screenshot=${png}`,
     '--virtual-time-budget=2500',
     `file://${html}`,
   ], { stdio: 'ignore' })
+}
+
+for (const [lang, l] of Object.entries(locales)) {
+  const html = resolve(tmp, `hero.${lang}.html`)
+  const png = resolve(out, `hero.${lang}.png`)
+  writeFileSync(html, page(l))
+  shoot(html, png, W, H)
   console.log(`hero.${lang}.png`)
 }
+
+const storeHtml = resolve(tmp, 'store.en.html')
+const storePng = resolve(out, 'store.en.png')
+writeFileSync(storeHtml, page(locales.en) + `<style>${storeSkin}</style>`)
+shoot(storeHtml, storePng, SW, SH)
+console.log('store.en.png')
