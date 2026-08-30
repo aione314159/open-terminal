@@ -1,9 +1,28 @@
+<div align="center">
+
+[English](README.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
+
+![Open Terminal Panel — your shell, below the editor](docs/images/hero.en.png)
+
 # Open Terminal Panel
 
-![Open Terminal Panel](docs/images/banner.png)
+**An Obsidian plugin that docks a real terminal below the editor — several shells in tabs, each with its own TTY. Desktop only.**
+
+[![release](https://img.shields.io/github/v/release/aione314159/open-terminal?label=release&color=8957e5)](../../releases/latest)
+[![downloads](https://img.shields.io/github/downloads/aione314159/open-terminal/total?label=downloads&color=2ea043)](../../releases)
+[![Obsidian 1.8.7+](https://img.shields.io/badge/Obsidian-1.8.7%2B-7c3aed?logo=obsidian&logoColor=white)](#install)
+[![Desktop only](https://img.shields.io/badge/Platform-Desktop%20only-555555)](#install)
+[![Prebuilt for Apple silicon and Intel](https://img.shields.io/badge/Prebuilt-Apple%20silicon%20%2B%20Intel-0a7ea4)](#install)
+[![License MIT](https://img.shields.io/badge/License-MIT-9e9e9e)](LICENSE)
 
 A real terminal inside Obsidian. It opens as a panel **below the editor** — where a
 terminal belongs in an editor window — and keeps several shells in tabs.
+
+[📥 Download](../../releases/latest) · [💡 What it does](#what-it-does) · [⚙️ Settings](#settings) · [🖥️ Real TTY](#how-it-works) · [🐞 Report an issue](../../issues/new)
+
+</div>
+
+---
 
 Not a fake shell: every tab gets a real TTY, so `vim`, `htop`, `git rebase -i`, a dev
 server and colored output all behave the way they do in your terminal app.
@@ -120,6 +139,7 @@ npm run build    # tsc --noEmit + production bundle
 
 ./cli/pack_pty_runtime.sh          # build the node-pty archive for this platform
 node cli/test_unpack.mjs           # unpack it with the plugin's own reader and verify
+node cli/build_hero.mjs            # regenerate docs/images/hero.<lang>.png
 ```
 
 Adding a language means one file in `src/locales/` and one line in its `index.ts`.

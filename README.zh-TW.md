@@ -1,8 +1,31 @@
+<!-- intl-release: locale-samples
+     This file is the Traditional Chinese translation of README.md and is
+     expected to contain CJK text. English source of truth: README.md -->
+
+<div align="center">
+
+[English](README.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
+
+![Open Terminal Panel — 你的 shell，就在編輯區下方](docs/images/hero.zh-TW.png)
+
 # Open Terminal Panel
 
-![Open Terminal Panel](docs/images/banner.png)
+**把真正的終端機停靠在 Obsidian 編輯區下方的插件——用分頁裝好幾個 shell，每個都有自己的 TTY。僅限桌面版。**
+
+[![版本](https://img.shields.io/github/v/release/aione314159/open-terminal?label=%E7%89%88%E6%9C%AC&color=8957e5)](../../releases/latest)
+[![下載次數](https://img.shields.io/github/downloads/aione314159/open-terminal/total?label=%E4%B8%8B%E8%BC%89%E6%AC%A1%E6%95%B8&color=2ea043)](../../releases)
+[![Obsidian 1.8.7 以上](https://img.shields.io/badge/Obsidian-1.8.7%2B-7c3aed?logo=obsidian&logoColor=white)](#安裝)
+[![僅限桌面](https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-%E5%83%85%E9%99%90%E6%A1%8C%E9%9D%A2-555555)](#安裝)
+[![預先編譯 Apple silicon 與 Intel](https://img.shields.io/badge/%E9%A0%90%E5%85%88%E7%B7%A8%E8%AD%AF-Apple%20silicon%20%2B%20Intel-0a7ea4)](#安裝)
+[![授權 MIT](https://img.shields.io/badge/%E6%8E%88%E6%AC%8A-MIT-9e9e9e)](LICENSE)
 
 Obsidian 裡的真終端機。面板開在**編輯區下方**——編輯器裡的終端機本來就該在那裡——並且用分頁裝好幾個 shell。
+
+[📥 下載](../../releases/latest) · [💡 它做什麼](#它做什麼) · [⚙️ 設定](#設定) · [🖥️ 真 TTY](#運作方式) · [🐞 回報問題](../../issues/new)
+
+</div>
+
+---
 
 不是模擬的殼：每個分頁都有真正的 TTY，所以 `vim`、`htop`、`git rebase -i`、跑 dev server、帶顏色的輸出，行為都跟你平常的終端機一樣。
 
@@ -92,6 +115,7 @@ npm run build    # tsc --noEmit + production bundle
 
 ./cli/pack_pty_runtime.sh          # 為當前平台打包 node-pty 壓縮檔
 node cli/test_unpack.mjs           # 用插件自己的解壓程式碼解開並驗證
+node cli/build_hero.mjs            # 重新產生 docs/images/hero.<lang>.png
 ```
 
 加一個語言 = `src/locales/` 多一個檔案 + `index.ts` 多一行。`src/locales/zh.ts` 是 key 集合的來源，其他語系表缺 key 會編譯失敗。
